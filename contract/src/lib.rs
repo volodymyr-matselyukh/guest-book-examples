@@ -6,7 +6,6 @@ use near_sdk::json_types::{U128};
 
 const POINT_ONE: Balance = 100_000_000_000_000_000_000_000;
 
-#[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, Serialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct PostedMessage {
@@ -30,7 +29,6 @@ impl Default for GuestBook{
 #[near_bindgen]
 impl GuestBook {
 
-  // Public - Adds a new message.
   #[payable]
   pub fn add_message(&mut self, text: String) {
     // If the user attaches more than 0.01N the message is premium
@@ -41,7 +39,6 @@ impl GuestBook {
     self.messages.push(&message);
   }
 
-  // Returns an array of messages.
   pub fn get_messages(&self, from_index:Option<U128>, limit:Option<u64>) -> Vec<PostedMessage>{
     let from = u128::from(from_index.unwrap_or(U128(0)));
 
