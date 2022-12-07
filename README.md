@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/Gitpod-Ready-orange)](https://gitpod.io/#/https://github.com/near-examples/guest-book-rust)
 [![](https://img.shields.io/badge/Contract-rust-red)](https://docs.near.org/develop/contracts/anatomy)
 [![](https://img.shields.io/badge/Frontend-React-blue)](https://docs.near.org/develop/integrate/frontend)
-[![](https://img.shields.io/github/workflow/status/near-examples/guest-book-rust/Tests/master?color=green&label=Tests)](https://github.com/near-examples/guest-book-rust/actions/workflows/tests.yml)
+[![](https://img.shields.io/github/workflow/status/near-examples/guest-book-rust/Tests/main?color=green&label=Tests)](https://github.com/near-examples/guest-book-rust/actions/workflows/tests.yml)
 
 
 The Guest Book is a simple app that stores messages from users, allowing to pay for a premium message.
