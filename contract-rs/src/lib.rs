@@ -2,7 +2,7 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::Serialize;
 use near_sdk::{env, AccountId, Balance, near_bindgen};
 use near_sdk::collections::{Vector};
-use near_sdk::json_types::{U128};
+use near_sdk::json_types::{U64};
 
 const POINT_ONE: Balance = 100_000_000_000_000_000_000_000;
 
@@ -39,12 +39,13 @@ impl GuestBook {
     self.messages.push(&message);
   }
 
-  pub fn get_messages(&self, from_index:Option<U128>, limit:Option<u64>) -> Vec<PostedMessage>{
-    let from = u128::from(from_index.unwrap_or(U128(0)));
+  pub fn get_messages(&self, from_index:Option<U64>, limit:Option<U64>) -> Vec<PostedMessage>{
+    let from = u64::from(from_index.unwrap_or(U64(0)));
+    let limit = u64::from(limit.unwrap_or(U64(10)));
 
     self.messages.iter()
     .skip(from as usize)
-    .take(limit.unwrap_or(10) as usize)
+    .take(limit as usize)
     .collect()
   }
 
@@ -79,9 +80,9 @@ mod tests {
     contract.add_message("3rd message".to_string());
     
     let total = &contract.total_messages();
-    assert!(*total == 3);
+    assert!(*total == 3); 
 
-    let last_message = &contract.get_messages(Some(U128::from(1)), Some(2))[1];
+    let last_message = &contract.get_messages(Some(U64::from(1)), Some(U64::from(2)))[1];
     assert_eq!(last_message.premium, false);
     assert_eq!(last_message.text, "3rd message".to_string());
   }
