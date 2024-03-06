@@ -6,11 +6,12 @@
   "scripts": {
     "build": "near-sdk-js build src/contract.ts build/guestbook.wasm",
     "test": "$npm_execpath run build && cd sandbox-ts && $npm_execpath run test -- -- ../build/guestbook.wasm",
-    "postinstall": "cd sandbox-ts && $npm_execpath install"
+    "postinstall": "cd sandbox-ts && $npm_execpath install",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
-    "near-cli": "^3.5.0",
-    "near-sdk-js": "1.0.0"
+    "near-cli": "^4.0.4",
+    "near-sdk-js": "^1.0.0"
   },
   "devDependencies": {
     "typescript": "^5.2.2",

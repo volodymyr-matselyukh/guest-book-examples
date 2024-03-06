@@ -5,18 +5,22 @@
 # TypeScript - Sandbox
 ./contract-ts/sandbox-ts/package-lock.json
 ./contract-ts/sandbox-ts/node_modules/
+contract-ts/sandbox-ts/node_modules/
 
 # TypeScript
-./contract-ts/build/
+contract-ts/build/
 ./contract-ts/node_modules/
+contract-ts/node_modules/
 ./contract-ts/sandbox-ts/node_modules/
 ./contract-ts/sandbox-ts/yarn.lock
 ./contract-ts/yarn.lock
 ./contract-ts/package-lock.json
 
 # Frontend
-./frontend/dist/
+frontend/dist/
 ./frontend/node_modules/
+frontend/node_modules/
+frontend/.parcel-cache
 ./frontend/.parcel-cache
 ./frontend/yarn.lock
 ./frontend/package-lock.json

@@ -7,7 +7,7 @@ import App from './App';
 import { GuestBook } from './near-interface';
 import { Wallet } from './near-wallet';
 
-const CONTRACT_NAME = "guestbook.near-examples.testnet"
+const CONTRACT_NAME = "volodymyr_matseliukh1.testnet"
 
 // When creating the wallet you can choose to create an access key, so the user
 // can skip signing non-payable methods when talking wth the  contract

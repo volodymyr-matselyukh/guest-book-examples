@@ -3,7 +3,11 @@ import { POINT_ONE, PostedMessage } from './model'
 
 @NearBindgen({})
 class GuestBook {
-  messages: Vector<PostedMessage> = new Vector<PostedMessage>("v-uid");
+  messages: Vector<PostedMessage>;
+
+  constructor() {
+    this.messages = new Vector<PostedMessage>("f08b3db2-4850-467e-b625-90b583231442");
+  }
 
   @call({ payableFunction: true })
   // Public - Adds a new message.
