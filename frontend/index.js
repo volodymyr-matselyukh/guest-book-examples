@@ -7,7 +7,7 @@ import App from './App';
 import { GuestBook } from './near-interface';
 import { Wallet } from './near-wallet';
 
-const CONTRACT_NAME = "truthful-planes.testnet"
+const CONTRACT_NAME = "malicious-basketball.testnet"
 
 //volodymyr_matseliukh1.testnet
 

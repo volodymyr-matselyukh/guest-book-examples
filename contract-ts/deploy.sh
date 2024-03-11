@@ -10,4 +10,4 @@ fi
 echo ">> Deploying contract"
 
 #https://docs.near.org/develop/contracts/quickstart
-near deploy malicious-basketball.testnet build/contract.wasm 
+near contract deploy malicious-basketball.testnet use-file build/contract.wasm with-init-call init json-args {} prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' network-config testnet sign-with-keychain send
