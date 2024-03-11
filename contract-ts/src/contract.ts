@@ -1,12 +1,17 @@
-import { NearBindgen, near, call, view, Vector } from 'near-sdk-js'
+import { NearBindgen, near, call, view, Vector, initialize } from 'near-sdk-js'
 import { POINT_ONE, PostedMessage } from './model'
 
-@NearBindgen({})
+@NearBindgen({requireInit: true})
 class GuestBook {
   messages: Vector<PostedMessage>;
 
+  @initialize({ privateFunction: true })
+  init() {
+    this.messages = new Vector<PostedMessage>("guestmessages");
+  }
+
   constructor() {
-    this.messages = new Vector<PostedMessage>("f08b3db2-4850-467e-b625-90b583231442");
+    this.messages = new Vector<PostedMessage>("guestmessages");
   }
 
   @call({ payableFunction: true })

@@ -9,8 +9,5 @@ fi
 
 echo ">> Deploying contract"
 
-
-#near create-account matseliukh-test.testnet --useFaucet
-
 #https://docs.near.org/develop/contracts/quickstart
-near deploy tired-cobweb.testnet build/contract.wasm 
+near deploy malicious-basketball.testnet build/contract.wasm 
