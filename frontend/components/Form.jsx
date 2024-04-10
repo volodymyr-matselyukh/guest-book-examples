@@ -22,7 +22,7 @@ export default function Form({ onSubmit, currentAccountId }) {
             defaultValue={'0'}
             id="donation"
             min="0"
-            step="0.01"
+            step="0.00001"
             type="number"
           />
           <span title="NEAR Tokens">Ⓝ</span>

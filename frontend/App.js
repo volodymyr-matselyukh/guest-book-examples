@@ -6,9 +6,13 @@ import Messages from './components/Messages';
 
 const App = ({ isSignedIn, guestBook, wallet }) => {
   const [messages, setMessages] = useState([]);
+  const [deposit, setDeposit] = useState(0);
+  const [usdtDeposit, setUsdtDeposit] = useState(0);
 
   useEffect(() => {
     guestBook.getMessages().then(setMessages);
+    guestBook.getDeposit().then(setDeposit);
+    guestBook.getWalletDeposit().then(setUsdtDeposit);
   }, []);
 
   onSubmit = async (e) => {
@@ -41,6 +45,10 @@ const App = ({ isSignedIn, guestBook, wallet }) => {
           ? <button onClick={signOut}>Log out</button>
           : <button onClick={signIn}>Log in</button>
         }</td>
+        </tr>
+        <tr>
+          <td>My deposit {deposit}</td>
+          <td>My usdt deposit {usdtDeposit}</td>
         </tr>
       </table>
 

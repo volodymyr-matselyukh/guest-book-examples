@@ -1,8 +1,8 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::Serialize;
-use near_sdk::{env, AccountId, Balance, near_bindgen};
-use near_sdk::collections::{Vector};
-use near_sdk::json_types::{U64};
+use near_sdk::{env, near_bindgen, AccountId, Balance, PanicOnDefault, log};
+use near_sdk::{collections::Vector, collections::LookupMap};
+use near_sdk::json_types::U64;
 
 const POINT_ONE: Balance = 100_000_000_000_000_000_000_000;
 
@@ -15,25 +15,46 @@ pub struct PostedMessage {
 }
 
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 struct GuestBook {
   messages: Vector<PostedMessage>,
+  deposits: LookupMap<AccountId, Balance>
 }
 
-impl Default for GuestBook{
-  fn default() -> Self {
-    Self{messages: Vector::new(b"m")}
-  }
+#[near_bindgen]
+#[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+struct OldState {
+  messages: Vector<PostedMessage>,
 }
 
 #[near_bindgen]
 impl GuestBook {
 
+  #[init]
+  pub fn new() -> Self {
+    Self{
+      messages: Vector::new("messages".as_bytes()),
+      deposits: LookupMap::new("deposits".as_bytes())
+    }
+  }
+
   #[payable]
   pub fn add_message(&mut self, text: String) {
     // If the user attaches more than 0.01N the message is premium
-    let premium = env::attached_deposit() >= POINT_ONE;
+    let attached_deposit = env::attached_deposit();
+    let premium = attached_deposit >= POINT_ONE;
     let sender = env::predecessor_account_id();
+
+    let is_sender_present = self.deposits.contains_key(&sender);
+
+    if is_sender_present {
+      let mut current_deposit = self.deposits.get(&sender).unwrap_or_default();
+      current_deposit = current_deposit + attached_deposit;
+
+      self.deposits.insert(&sender, &current_deposit);
+    } else {
+      self.deposits.insert(&sender, &attached_deposit);
+    }
 
     let message = PostedMessage{premium, sender, text};
     self.messages.push(&message);
@@ -49,7 +70,42 @@ impl GuestBook {
     .collect()
   }
 
+  pub fn get_my_deposit(&self, sender: AccountId) -> u128 {
+    let is_sender_present = self.deposits.contains_key(&sender);
+
+    if is_sender_present {
+      return self.deposits.get(&sender).unwrap_or_default()
+    }
+
+    return 0
+  }
+
   pub fn total_messages(&self) -> u64 { self.messages.len() }
+
+  #[private]
+  #[init(ignore_state)]
+  pub fn migrate() -> Self {
+      // retrieve the current state from the contract
+      let mut new_messages: Vector<PostedMessage> = Vector::new("messages".as_bytes());
+
+      let removal_result = near_sdk::env::storage_remove("new_messages\x00\x00\x00\x00\x00\x00\x00\x00".as_bytes());
+      log!("Removal result {}", removal_result);
+
+      let removal_result1 = near_sdk::env::storage_remove("new_messages\x01\x00\x00\x00\x00\x00\x00\x00".as_bytes());
+      log!("Removal result {}", removal_result1);
+      
+      let premium = false;
+      let sender = env::predecessor_account_id();
+      let text = "initial text";
+      let initial_message = PostedMessage{premium, sender, text: String::from(text)};
+      new_messages.push(&initial_message);
+
+      // return the new state
+      Self {
+          messages: new_messages,
+          deposits: LookupMap::new("deposits".as_bytes())
+      }
+  }
 }
 
 /*

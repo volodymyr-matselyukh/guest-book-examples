@@ -11,3 +11,8 @@ export class PostedMessage {
     this.text = text;
   }
 }
+
+export interface Deposit {
+  owner: string;
+  amount: bigint;
+}

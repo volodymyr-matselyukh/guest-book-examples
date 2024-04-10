@@ -14,7 +14,7 @@ const CONTRACT_NAME = "malicious-basketball.testnet"
 //tired-cobweb.testnet
 
 // When creating the wallet you can choose to create an access key, so the user
-// can skip signing non-payable methods when talking wth the  contract
+// can skip signing non-payable methods when talking wth the contract
 const wallet = new Wallet({ createAccessKeyFor: CONTRACT_NAME})
 
 // Abstract the logic of interacting with the contract to simplify your flow
