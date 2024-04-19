@@ -1,6 +1,6 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::Serialize;
-use near_sdk::{env, near_bindgen, AccountId, Balance, PanicOnDefault, log};
+use near_sdk::{env, log, near_bindgen, AccountId, Balance, PanicOnDefault};
 use near_sdk::{collections::Vector, collections::LookupMap};
 use near_sdk::json_types::U64;
 
@@ -81,6 +81,12 @@ impl GuestBook {
   }
 
   pub fn total_messages(&self) -> u64 { self.messages.len() }
+
+  pub fn ft_on_transfer(&self, sender_id: AccountId, amount: String, msg: String) -> String {
+    log!("ft_on_transfer called {} {} {}", sender_id, amount, msg);
+
+    return "0".to_string()
+  }
 
   #[private]
   #[init(ignore_state)]

@@ -8,12 +8,18 @@ const App = ({ isSignedIn, guestBook, wallet }) => {
   const [messages, setMessages] = useState([]);
   const [deposit, setDeposit] = useState(0);
   const [usdtDeposit, setUsdtDeposit] = useState(0);
+  const [platformUsdtDeposit, setPlatformUsdtDeposit] = useState(0);
 
   useEffect(() => {
     guestBook.getMessages().then(setMessages);
     guestBook.getDeposit().then(setDeposit);
-    guestBook.getWalletDeposit().then(setUsdtDeposit);
+    guestBook.getWalletUsdDeposit().then(setUsdtDeposit);
+    guestBook.getPlatformUsdDeposit().then(setPlatformUsdtDeposit);
   }, []);
+
+  const depositFunds = () => {
+    guestBook.depositFunds();
+  }
 
   onSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +47,7 @@ const App = ({ isSignedIn, guestBook, wallet }) => {
       <table>
         <tr>
           <td><h1>📖 NEAR Guest Book</h1></td>
+          <td></td>
           <td>{ isSignedIn
           ? <button onClick={signOut}>Log out</button>
           : <button onClick={signIn}>Log in</button>
@@ -49,6 +56,7 @@ const App = ({ isSignedIn, guestBook, wallet }) => {
         <tr>
           <td>My deposit {deposit}</td>
           <td>My usdt deposit {usdtDeposit}</td>
+          <td>Platform deposit {platformUsdtDeposit}</td>
         </tr>
       </table>
 
@@ -58,6 +66,7 @@ const App = ({ isSignedIn, guestBook, wallet }) => {
         : <SignIn/>
       }
 
+      <button onClick={depositFunds}>Invest</button>
       <hr />
 
       { !!messages.length && <Messages messages={messages}/> }

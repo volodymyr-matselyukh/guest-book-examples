@@ -1,9 +1,10 @@
 /* Talking with a contract often involves transforming data, we recommend you to encapsulate that logic into a class */
 
 import { utils } from 'near-api-js';
-import { Wallet } from './near-wallet';
 
 const usdtAccountId = 'usdt.fakes.testnet';
+
+const THIRTY_TGAS = '300000000000000';
 
 //const usdtWallet = new Wallet({ createAccessKeyFor: usdtAccountId });
 
@@ -14,7 +15,7 @@ export class GuestBook {
     this.wallet = walletToUse
   }
 
-  async getWalletDeposit() {
+  async getWalletUsdDeposit() {
     console.log('contract id', this.contractId);
     console.log('wallet contract id', this.wallet);
 
@@ -24,7 +25,13 @@ export class GuestBook {
 
     return (deposit / 1000_000).toFixed(2);
   }
-  
+
+  async getPlatformUsdDeposit() {
+    const deposit = await this.wallet.viewMethod({ contractId: usdtAccountId, method: "ft_balance_of", args: { account_id: this.contractId } });
+
+    return (deposit / 1000_000).toFixed(2);
+  }
+
   async getDeposit() {
     console.log('contract id', this.contractId);
     console.log('wallet contract id', this.wallet);
@@ -40,6 +47,13 @@ export class GuestBook {
     const messages = await this.wallet.viewMethod({ contractId: this.contractId, method: "get_messages" })
     console.log(messages)
     return messages
+  }
+
+  async depositFunds() {
+    const nearDeposit = utils.format.formatNearAmount(1);
+
+    console.log('near deposit', nearDeposit);
+    const deposit = await this.wallet.callMethod({ contractId: usdtAccountId, method: "ft_transfer_call", gas: THIRTY_TGAS, args: { receiver_id: this.contractId, amount: "1000000", msg: "invest" }, deposit: "1"});
   }
 
   async addMessage(message, donation) {
